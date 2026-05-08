@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Trip - Shree Swami Travels</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e67e22;
+            --bg-color: #f4f7f6;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            margin: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .header p {
+            color: var(--accent-color);
+            font-weight: bold;
+            margin: 5px 0 0 0;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #34495e;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dcdde1;
+            border-radius: 6px;
+            box-sizing: border-box; /* Important for width */
+            font-size: 16px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #1a252f;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <div class="header">
+        <h1>Shree Swami Travels</h1>
+        <p>Reliable & Comfortable Journeys</p>
+    </div>
+
+    <form action="/book" method="post">
+        <div class="input-group">
+            <label for="customer_name">Full Name</label>
+            <input type="text" id="customer_name" name="customer_name" placeholder="Enter your name" required>
+        </div>
+
+        <div class="input-group">
+            <label for="customer_number">Mobile Number</label>
+            <input type="tel" id="customer_number" name="customer_number" placeholder="+91 XXXXX XXXXX" required>
+        </div>
+
+        <div class="input-group">
+            <label for="start_location">Pickup Location</label>
+            <input type="text" id="start_location" name="start_location" placeholder="e.g. Railway Station" required>
+        </div>
+
+        <div class="input-group">
+            <label for="destination">Drop Destination</label>
+            <input type="text" id="destination" name="destination" placeholder="e.g. Airport / City Center" required>
+        </div>
+
+        <div class="input-group">
+            <label for="time">Pickup Time (AM/PM)</label>
+            <input type="time" id="time" name="time" required>
+        </div>
+
+        <div class="input-group">
+            <label for="car_type">Select Car Type</label>
+            <select id="car_type" name="car_type" required>
+                <option value="" disabled selected>Choose a vehicle</option>
+                <option value="Sedan">Sedan (4 Seater)</option>
+                <option value="MUV">MUV (6-7 Seater)</option>
+            </select>
+        </div>
+
+        <button type="submit">Book My Trip</button>
+    </form>
+
+    <div class="footer-note">
+        Our team will contact you on WhatsApp to confirm.
+    </div>
+</div>
+
+</body>
+</html>
