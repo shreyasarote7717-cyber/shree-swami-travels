@@ -20,6 +20,12 @@ TWILIO_NUMBER = "whatsapp:+14155238886"
 # Your staff numbers
 STAFF_NUMBERS = ["whatsapp:+918320286948", "whatsapp:+916353963704"]
 
+# Use the EXACT name from your Render Environment tab here
+raw_numbers = os.environ.get('THE_NAME_FROM_RENDER', '') 
+
+# This splits your comma-separated numbers into a list
+staff_list = [num.strip() for num in raw_numbers.split(',') if num.strip()]
+
 client = Client(TWILIO_SID, TWILIO_TOKEN)
 
 # --- ROUTES ---
