@@ -132,39 +132,47 @@ async def confirm_booking(booking_id: int, db: Session = Depends(database.get_db
 
 @app.post("/book")
 async def create_booking(
-    customer_name: str = Form(...),
-    customer_number: str = Form(...),
-    # ... other fields ...
+    request: Request,
+    customer_name: str = Form(...),    # Matches name="customer_name"
+    customer_number: str = Form(...),  # Matches name="customer_number"
+    start_location: str = Form(...),   # Matches name="start_location"
+    destination: str = Form(...),      # Matches name="destination"
+    time: str = Form(...),             # Matches name="time"
+    car_type: str = Form(...),         # Matches name="car_type"
     db: Session = Depends(database.get_db)
 ):
-    # [DATABASE CODE HERE - Keep as is]
-
-    # 1. Message to STAFF (You)
-    staff_text = f"🚕 *New Trip Request*\n👤 {customer_name}\n📍 {start_location} to {destination}"
-
-    # 2. Message to CUSTOMER (The traveler)
-    customer_text = (
-        f"Hello {customer_name}! 🙏\n"
-        f"Your booking for a {car_type} to {destination} has been received by *Shree Swami Travels*.\n"
-        f"We will confirm your ride shortly! ✅"
+    # 1. Save to Database
+    new_booking = database.Booking(
+        name=customer_name, 
+        phone=customer_number, 
+        pickup=start_location, 
+        destination=destination,
+        timestamp=datetime.now()
     )
+    db.add(new_booking)
+    db.commit()
 
-    try:
-        # Alert Staff
-        for staff in STAFF_NUMBERS:
-            client.messages.create(from_=TWILIO_NUMBER, body=staff_text, to=staff)
-        
-        # ALERT CUSTOMER (Add this line!)
-        # Ensure customer_number is formatted as 'whatsapp:+91...'
-        formatted_cust_number = f"whatsapp:{customer_number}" if "whatsapp:" not in customer_number else customer_number
-        
-        client.messages.create(
-            from_=TWILIO_NUMBER, 
-            body=customer_text, 
-            to=formatted_cust_number
-        )
+    # 2. The WhatsApp Loop 🔄
+    # We include 'time' and 'car_type' so staff has full details
+    message_body = (
+        f"New Booking Alert! 🚕\n"
+        f"Name: {customer_name}\n"
+        f"From: {start_location}\n"
+        f"To: {destination}\n"
+        f"Time: {time}\n"
+        f"Car: {car_type}\n"
+        f"Phone: {customer_number}"
+    )
+    
+    for staff_phone in STAFF_NUMBERS:
+        try:
+            client.messages.create(
+                from_=TWILIO_NUMBER,
+                to=staff_phone,
+                body=message_body
+            )
+        except Exception as e:
+            print(f"⚠️ Error sending to {staff_phone}: {e}")
 
-    except Exception as e:
-        print(f"⚠️ WhatsApp Error: {e}")
-
+    # 3. Final Redirect 🎯
     return RedirectResponse(url="/thankyou", status_code=303)
